@@ -55,10 +55,27 @@ export default async function handler(req, res) {
 
         const subject = isHR
           ? `Application for ${position} at ${company}`
-          : `Interested in the ${position} role at ${company}`;
+          : `Request to Forward Job Application to HR Team (${position})`;
 
         const body = isHR
-          ? `Dear HR,\n\nI am writing to apply for the position of ${position} at ${company}. Please find my resume attached.\n\nBest regards,\nGray`
+          ? `Dear Hiring Manager,
+          
+          \n\nI am writing to express my keen interest in being an/a Position Name at Company Name. 
+          With over 4 years of combined experience as a Finance Executive and External Audit Associate, I bring a comprehensive skill set in financial reporting, 
+          audit preparation, variance analysis, and regulatory compliance. My hands-on experience across full-set accounts, 
+          payroll administration, and statutory audit processes has equipped me to contribute effectively to your dynamic team. 
+          
+          \nI hold a Diploma in Accounting and Business (ACCA Part 1), a Certificate in Corporate and Business Law (LW) (ACCA Part 2/F4), 
+          and a Diploma in Accounting and Finance (LCCI Level 3, UK). These qualifications have not only deepened my technical knowledge of IFRS and 
+          corporate taxation but also enhanced my ability to evaluate internal controls and support clients across diverse industries. 
+          My Diploma in Communicative English has further sharpened my ability to communicate clearly with both clients and colleagues.
+          
+          \nI am proficient in MYOB, QuickBooks, and Xero, and experienced in preparing audit schedules, resolving discrepancies, and collaborating with external 
+          auditors to ensure timely and accurate reporting. I am confident that my background aligns well with the responsibilities of the role. 
+          Please refer to my resume attached for your review.
+          
+          \nThank you for considering my application. I am available for an immediate start and would welcome the chance to further discuss how my skills and 
+          experiences can contribute to your team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728. \n\nBest regards,\n\nThin Yati Su`
           : `Hello,\n\nI'm interested in the ${position} role at ${company}. I've attached my resume. Looking forward to hearing from you!\n\nThanks,\nGray`;
 
         try {
