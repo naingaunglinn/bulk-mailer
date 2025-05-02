@@ -75,7 +75,7 @@ export default async function handler(req, res) {
             text: body,
             attachments: [
               {
-                filename: 'resume.pdf',
+                filename: 'Thin Yati Su - resume.pdf',
                 path: resumePath,
               },
             ],
