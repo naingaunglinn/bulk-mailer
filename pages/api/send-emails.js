@@ -58,25 +58,14 @@ export default async function handler(req, res) {
           : `Request to Forward Job Application to HR Team (${position})`;
 
         const body = isHR
-          ? `Dear Hiring Manager,
-          
-          \n\nI am writing to express my keen interest in being an/a Position Name at Company Name. 
-          With over 4 years of combined experience as a Finance Executive and External Audit Associate, I bring a comprehensive skill set in financial reporting, 
-          audit preparation, variance analysis, and regulatory compliance. My hands-on experience across full-set accounts, 
-          payroll administration, and statutory audit processes has equipped me to contribute effectively to your dynamic team. 
-          
-          \nI hold a Diploma in Accounting and Business (ACCA Part 1), a Certificate in Corporate and Business Law (LW) (ACCA Part 2/F4), 
-          and a Diploma in Accounting and Finance (LCCI Level 3, UK). These qualifications have not only deepened my technical knowledge of IFRS and 
-          corporate taxation but also enhanced my ability to evaluate internal controls and support clients across diverse industries. 
-          My Diploma in Communicative English has further sharpened my ability to communicate clearly with both clients and colleagues.
-          
-          \nI am proficient in MYOB, QuickBooks, and Xero, and experienced in preparing audit schedules, resolving discrepancies, and collaborating with external 
-          auditors to ensure timely and accurate reporting. I am confident that my background aligns well with the responsibilities of the role. 
-          Please refer to my resume attached for your review.
-          
-          \nThank you for considering my application. I am available for an immediate start and would welcome the chance to further discuss how my skills and 
-          experiences can contribute to your team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728. \n\nBest regards,\n\nThin Yati Su`
-          : `Hello,\n\nI'm interested in the ${position} role at ${company}. I've attached my resume. Looking forward to hearing from you!\n\nThanks,\nGray`;
+          ? `Dear Hiring Manager, \n\nI am writing to express my keen interest in being an/a ${position} at ${company}. With over 4 years of combined experience as a Finance Executive and External Audit Associate, I bring a comprehensive skill set in financial reporting, audit preparation, variance analysis, and regulatory compliance. My hands-on experience across full-set accounts, payroll administration, and statutory audit processes has equipped me to contribute effectively to your dynamic team. 
+          \nI hold a Diploma in Accounting and Business (ACCA Part 1), a Certificate in Corporate and Business Law (LW) (ACCA Part 2/F4), and a Diploma in Accounting and Finance (LCCI Level 3, UK). These qualifications have not only deepened my technical knowledge of IFRS and corporate taxation but also enhanced my ability to evaluate internal controls and support clients across diverse industries. My Diploma in Communicative English has further sharpened my ability to communicate clearly with both clients and colleagues.
+          \nI am proficient in MYOB, QuickBooks, and Xero, and experienced in preparing audit schedules, resolving discrepancies, and collaborating with external auditors to ensure timely and accurate reporting. I am confident that my background aligns well with the responsibilities of the role. Please refer to my resume attached for your review.
+          \nThank you for considering my application. I am available for an immediate start and would welcome the chance to further discuss how my skills and experiences can contribute to your team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728. \n\nBest regards,\nThin Yati Su\nemail: tyatisu7777@gmail.com\nWhatsApp: +95 9780759728`
+          : `Dear Respective Team, \n\nI hope this message finds you well. My name is Thin Yati Su, and I am reaching out to express my interest in joining as ${position} at ${company}. 
+          \nWhile exploring your company’s website, I was unable to locate HR contact details for job applications.  I kindly ask if you could forward my resume to the appropriate HR representative or hiring manager.
+          \nIf there’s a preferred process or contact for submitting applications, I’d greatly appreciate your guidance. I would also appreciate it if you could share the contact information of the HR team.Thank you for your time and assistance. 
+          \nI’m enthusiastic about the opportunity to contribute to your company's success and would be grateful for your support in connecting me with the HR team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728. \n\nBest regards,\nThin Yati Su\nemail: tyatisu7777@gmail.com\nWhatsApp: +95 9780759728`;
 
         try {
           await transport.sendMail({
