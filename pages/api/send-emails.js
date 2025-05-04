@@ -10,6 +10,24 @@ export const config = {
   },
 };
 
+const gmailAccounts = [
+  { user: process.env.GMAIL_USER_1, pass: process.env.GMAIL_PASS_1 },
+  { user: process.env.GMAIL_USER_2, pass: process.env.GMAIL_PASS_2 },
+  { user: process.env.GMAIL_USER_3, pass: process.env.GMAIL_PASS_3 },
+  { user: process.env.GMAIL_USER_4, pass: process.env.GMAIL_PASS_4 },
+];
+
+function createTransporterByIndex(index) {
+  const account = gmailAccounts[index % gmailAccounts.length];
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: account.user,
+      pass: account.pass,
+    },
+  });
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -47,18 +65,22 @@ export default async function handler(req, res) {
       const results = [];
 
       // Loop through data and send emails
-      for (const row of data) {
+      for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+        const transporter = createTransporterByIndex(i);
+        const sender = gmailAccounts[i % gmailAccounts.length].user;
+
         const to = row['company_email'];
         const company = row['company_name'];
         const position = row['position'];
         const isHR = row['is_hr_mail'] === true || row['is_hr_mail'] === 'TRUE';
 
         const subject = isHR
-          ? `Application for ${position} at ${company}`
+          ? `Application for ${position}`
           : `Request to Forward Job Application to HR Team (${position})`;
 
-        const body = isHR
-          ? `Dear Hiring Manager, \n\nI am writing to express my keen interest in being an/a ${position} at ${company}. With over 4 years of combined experience as a Finance Executive and External Audit Associate, I bring a comprehensive skill set in financial reporting, audit preparation, variance analysis, and regulatory compliance. My hands-on experience across full-set accounts, payroll administration, and statutory audit processes has equipped me to contribute effectively to your dynamic team. 
+          const body = isHR
+          ? `Dear Hiring Manager, \n\nI am writing to express my keen interest in being the ${position} at ${company}. With over 4 years of combined experience as a Finance Executive and External Audit Associate, I bring a comprehensive skill set in financial reporting, audit preparation, variance analysis, and regulatory compliance. My hands-on experience across full-set accounts, payroll administration, and statutory audit processes has equipped me to contribute effectively to your dynamic team. 
           \nI hold a Diploma in Accounting and Business (ACCA Part 1), a Certificate in Corporate and Business Law (LW) (ACCA Part 2/F4), and a Diploma in Accounting and Finance (LCCI Level 3, UK). These qualifications have not only deepened my technical knowledge of IFRS and corporate taxation but also enhanced my ability to evaluate internal controls and support clients across diverse industries. My Diploma in Communicative English has further sharpened my ability to communicate clearly with both clients and colleagues.
           \nI am proficient in MYOB, QuickBooks, and Xero, and experienced in preparing audit schedules, resolving discrepancies, and collaborating with external auditors to ensure timely and accurate reporting. I am confident that my background aligns well with the responsibilities of the role. Please refer to my resume attached for your review.
           \nThank you for considering my application. I am available for an immediate start and would welcome the chance to further discuss how my skills and experiences can contribute to your team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728. \n\nBest regards,\nThin Yati Su\nemail: tyatisu7777@gmail.com\nWhatsApp: +95 9780759728`
@@ -67,12 +89,31 @@ export default async function handler(req, res) {
           \nIf there’s a preferred process or contact for submitting applications, I’d greatly appreciate your guidance. I would also appreciate it if you could share the contact information of the HR team.Thank you for your time and assistance. 
           \nI’m enthusiastic about the opportunity to contribute to your company's success and would be grateful for your support in connecting me with the HR team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728. \n\nBest regards,\nThin Yati Su\nemail: tyatisu7777@gmail.com\nWhatsApp: +95 9780759728`;
 
+          const htmlBody = isHR
+          ? `<div style="text-align: justify; font-family: Arial, sans-serif; line-height: 1.6; width:80%;">
+              <p>Dear Hiring Manager,</p>
+              <p>I am writing to express my keen interest in being the ${position} at ${company}. With over 4 years of combined experience as a Finance Executive and External Audit Associate, I bring a comprehensive skill set in financial reporting, audit preparation, variance analysis, and regulatory compliance. My hands-on experience across full-set accounts, payroll administration, and statutory audit processes has equipped me to contribute effectively to your dynamic team.</p>
+              <p>I hold a Diploma in Accounting and Business (ACCA Part 1), a Certificate in Corporate and Business Law (LW) (ACCA Part 2/F4), and a Diploma in Accounting and Finance (LCCI Level 3, UK). These qualifications have not only deepened my technical knowledge of IFRS and corporate taxation but also enhanced my ability to evaluate internal controls and support clients across diverse industries. My Diploma in Communicative English has further sharpened my ability to communicate clearly with both clients and colleagues.</p>
+              <p>I am proficient in MYOB, QuickBooks, and Xero, and experienced in preparing audit schedules, resolving discrepancies, and collaborating with external auditors to ensure timely and accurate reporting. I am confident that my background aligns well with the responsibilities of the role. Please refer to my resume attached for your review.</p>
+              <p>Thank you for considering my application. I am available for an immediate start and would welcome the chance to further discuss how my skills and experiences can contribute to your team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728.</p>
+              <p>Best regards,<br/>Thin Yati Su<br/>email: tyatisu7777@gmail.com<br/>WhatsApp: +95 9780759728</p>
+            </div>`
+          : `<div style="text-align: justify; font-family: Arial, sans-serif; line-height: 1.6; width: 80%;">
+              <p>Dear Respective Team,</p>
+              <p>I hope this message finds you well. My name is Thin Yati Su, and I am reaching out to express my interest in joining as ${position} at ${company}.</p>
+              <p>While exploring your company’s website, I was unable to locate HR contact details for job applications.I kindly ask if you could forward my resume to the appropriate HR representative or hiring manager.</p>
+              <p>If there’s a preferred process or contact for submitting applications, I’d greatly appreciate your guidance. I would also appreciate it if you could share the contact information of the HR team. Thank you for your time and assistance.</p>
+              <p>I’m enthusiastic about the opportunity to contribute to your company's success and would be grateful for your support in connecting me with the HR team. I can be reached via email at tyatisu7777@gmail.com or WhatsApp at +95 9780759728.</p>
+              <p>Best regards,<br/>Thin Yati Su<br/>email: tyatisu7777@gmail.com<br/>WhatsApp: +95 9780759728</p>
+            </div>`;
+        
         try {
-          await transport.sendMail({
-            from: process.env.GMAIL_USER,
+          await transporter.sendMail({
+            from: sender,
             to,
             subject,
             text: body,
+            html: htmlBody,
             attachments: [
               {
                 filename: 'Thin Yati Su - resume.pdf',
