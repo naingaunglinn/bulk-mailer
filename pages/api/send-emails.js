@@ -14,6 +14,7 @@ const gmailAccounts = [
   { user: process.env.GMAIL_USER_1, pass: process.env.GMAIL_PASS_1 },
   { user: process.env.GMAIL_USER_2, pass: process.env.GMAIL_PASS_2 },
   { user: process.env.GMAIL_USER_3, pass: process.env.GMAIL_PASS_3 },
+  { user: process.env.GMAIL_USER_4, pass: process.env.GMAIL_PASS_4 },
 ];
 
 function createTransporterByIndex(index) {
