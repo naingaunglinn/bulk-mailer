@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import UploadForm from "./components/UploadForm";
+import UploadFiles from "./components/UploadFiles";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,6 +20,7 @@ export default function Home() {
     >
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <UploadForm />
+        <UploadFiles />
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         

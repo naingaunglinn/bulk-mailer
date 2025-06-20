@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { Client, Storage } from 'appwrite';
+import { useState, useEffect } from 'react';
 
 export default function UploadForm() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [response, setResponse] = useState(null);
   const [fileName, setFileName] = useState('No file chosen');
+  const [files, setFiles] = useState([]);
 
 
   const handleFileChange = (e) => {
@@ -49,6 +51,48 @@ export default function UploadForm() {
       setUploading(false);
     }
   };
+  const client = new Client()
+    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT);
+
+  const storage = new Storage(client);
+
+  const getFiles = async () => {
+    const results = await storage.listFiles(
+      process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+    );
+
+      const wantedFields = ['name', '$createdAt'];
+      const fileData = results.files;
+      
+      const newfileArray = fileData.map(data => {
+        const newObject = {};
+          wantedFields.forEach(field => {
+            if (data.hasOwnProperty(field)) { // Check if the field exists in the original object
+              if(field == '$createdAt'){
+                const dateObj = new Date(data[field]);
+                // Convert to local date and time
+                const uploadedAt = `${dateObj.toLocaleDateString('en-CA')} ${dateObj.toLocaleTimeString('en-US')}`; // HH:mm:ss (24h format)
+                newObject['uploadedAt'] = uploadedAt;
+              } else {
+                newObject[field] = data[field];
+              }
+            }
+          });
+        return newObject;
+    });      
+    return newfileArray;
+  }
+
+  useEffect(() => {
+    getFiles()
+      .then((data) => {
+        setFiles(data);
+      })
+      .catch((err) => {
+        console.error("Error fetching files:", err);
+      });
+  }, []);
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-4 border rounded shadow bg-white">
@@ -65,6 +109,16 @@ export default function UploadForm() {
             onChange={handleFileChange}
           />
         </label>
+        <ul className="list-disc text-black list-start">
+          {files && files.map(({name, uploadedAt}) =>{
+            return (
+              <li className='mb-2'>
+                <p className='text-black text-md'>{name}</p>
+                <p className='text-black text-xs'>{uploadedAt}</p>
+              </li>
+            )
+          })}
+        </ul>
         
 
         <button type="submit" 
